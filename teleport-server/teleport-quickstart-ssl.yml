@@ -6,7 +6,7 @@ services:
     image: quay.io/gravitational/teleport:6.1
     container_name: teleport-configure
     entrypoint: /bin/sh
-    hostname: cache.mail250.com
+    hostname: teleport-stage.mail250.com
     command: -c "if [ ! -f /etc/teleport/teleport.yaml ]; then teleport configure > /etc/teleport/teleport.yaml; fi"
     volumes:
       - ./teleport/config:/etc/teleport
@@ -35,7 +35,7 @@ services:
     image: quay.io/gravitational/teleport:6.1
     container_name: teleport
     entrypoint: /bin/sh
-    hostname: cache.mail250.com
+    hostname: teleport-stage.mail250.com
     command: -c "sleep 1 && /usr/bin/dumb-init teleport start -c /etc/teleport/teleport.yaml"
     ports:
       - "3023:3023"
@@ -45,11 +45,11 @@ services:
       - ./teleport/config:/etc/teleport
       - ./teleport/data:/var/lib/teleport
     environment:
-      VIRTUAL_HOST: cache.mail250.com
+      VIRTUAL_HOST: teleport-stage.mail250.com
       VIRTUAL_PORT: 3080
       VIRTUAL_PROTO: https
-      LETSENCRYPT_HOST: cache.mail250.com
-      LETSENCRYPT_EMAIL: hello@mimepost.com
+      LETSENCRYPT_HOST: teleport-stage.mail250.com
+      LETSENCRYPT_EMAIL: sales@symbolist.technology
     depends_on:
       - configure
       - letsencrypt-nginx-proxy-companion
