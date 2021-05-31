@@ -18,7 +18,7 @@ When we start this compose file, it will automatically create a default configur
 #     if you are an Enterprise customer.
 #
 teleport:
-  nodename: cache.mail250.com
+  nodename:  <your-fqdn>
   data_dir: /var/lib/teleport
   log:
     output: stderr
@@ -27,7 +27,7 @@ teleport:
 auth_service:
   enabled: "yes"
   listen_addr: 0.0.0.0:3025
-  public_addr: cache.mail250.com:3025
+  public_addr:  <your-fqdn>:3025
 ssh_service:
   enabled: "yes"
   labels:
@@ -41,17 +41,18 @@ proxy_service:
   listen_addr: 0.0.0.0:3023
   #https_keypairs: []
   acme: {}
-  public_addr: cache.mail250.com
-  ssh_public_addr: cache.mail250.com
+  public_addr:  <your-fqdn>
+  ssh_public_addr:  <your-fqdn>
 
 ```
 
-Make sure you add the “public_addr” and “ssh_public_addr” on the auth_service and proxy_service. Replace the <your-fqdn> with your FQDN of your teleport server or reverse-proxy/load-balancer.
+Make sure you add the “public_addr” and “ssh_public_addr” on the proxy_service 
+and  “public_addr” on auth_service. Replace the <your-fqdn> with your FQDN of your teleport server or reverse-proxy/load-balancer.
 
-You also should replace your ca_pin, you can obtain by executing the following command.
+Also You have to replace your ca_pin, you can obtain by executing the following command.
 
 ```shell
-docker-container exec teleport tctl status
+docker container exec teleport tctl status
 ```
 After that restart your docker container with the following command.
 
@@ -74,12 +75,6 @@ docker container exec teleport tctl users add admin --logins=joe,root --roles=ad
 `output` Should be
 
 ```shell
-
-root@cache teleport-server]# docker container exec teleport tctl users add joe --logins=joe,root --roles=admin
-User "joe" has been created but requires a password. Share this URL with the user to complete user setup, link is valid for 1h:
-https://cache.mail250.com:3080/web/invite/448adc1a1cda40e3db29e5644c4de414
-
-NOTE: Make sure cache.mail250.com:3080 points at a Teleport proxy which users can access.
 [root@cache teleport-server]# docker container exec teleport tctl users add admin --logins=joe,root --roles=admin
 User "admin" has been created but requires a password. Share this URL with the user to complete user setup, link is valid for 1h:
 https://cache.mail250.com:3080/web/invite/a5526e09b50f6eb3a32654c424069e56
@@ -90,6 +85,7 @@ NOTE: Make sure cache.mail250.com:3080 points at a Teleport proxy which users ca
 ```
 Then copy the token to the browser and register it with google 2FA 
 
+Note : If Invite URl is not works then remove the port from the url 
 
 # 3
 
@@ -121,9 +117,9 @@ spec:
 ```
 Now Run the Following Commad to apply Roles and Add user
 
+Note : You can use lables here for maping server to the roles
 
 ```shell
  tctl create -f roles.yaml
  tctl users add alice --roles=alice
- tctl users add bob --roles=bob
 ```

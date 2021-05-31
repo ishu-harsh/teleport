@@ -94,5 +94,7 @@ ssh_service:
 ```
 Add lables to your Node according to your roles mapping 
 
+Note : Lables are usefull when you divide roles and access to team users
+
 Role Reference : https://goteleport.com/docs/access-controls/guides/role-templates/
 
